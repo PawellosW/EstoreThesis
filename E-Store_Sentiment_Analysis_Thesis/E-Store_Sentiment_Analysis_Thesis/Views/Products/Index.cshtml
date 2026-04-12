@@ -1,0 +1,111 @@
+﻿@model List<E_Store_Sentiment_Analysis_Thesis.Models.Product>
+@{
+    ViewData["Title"] = "Produkty";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Produkty</h2>
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-success">Dodaj produkt</a>
+    </p>
+}
+
+
+
+<ul class="nav nav-tabs mb-3">
+    <!-- Link do wszystkich produktów -->
+    <li class="nav-item">
+        <a class="nav-link @(ViewData["SelectedCategoryId"] == null ? "active" : "")"
+           asp-action="Index">
+            Wszystko
+        </a>
+    </li>
+
+    <!-- Linki do poszczególnych kategorii -->
+
+
+    @foreach (var category in ViewBag.Categories)
+    {
+        <li class="nav-item">
+            <a class="nav-link @(ViewData["SelectedCategoryId"]?.ToString() == category.Id.ToString() ? "active" : "")"
+               asp-action="Index"
+               asp-route-categoryId="@category.Id">
+                @category.Name
+            </a>
+        </li>
+    }
+
+    <!-- Dodatkowe linki -->
+    <li class="nav-item ms-auto">
+        <a asp-controller="StoreReview" asp-action="Index" class="btn btn-link">
+            Zobacz opinie o sklepie
+        </a>
+    </li>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <li class="nav-item">
+            <a asp-controller="Orders" asp-action="Index" class="btn btn-link">
+                Zamówienia
+            </a>
+        </li>
+    }
+
+    @if (User.IsInRole("Admin"))
+    {
+        <li class="nav-item">
+            <a asp-controller="Dashboard" asp-action="Index" class="btn btn-link">
+                Zamówienia
+            </a>
+        </li>
+    }
+
+</ul>
+
+
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        <a asp-action="Details" asp-route-id="@product.Id">@product.Name</a>
+                    </h5>
+
+                    <p class="card-text">@product.Description</p>
+                    <p class="card-text"><strong>Cena:</strong> @(product.Price?.ToString("C") ?? "Brak ceny")</p>
+                    <p class="card-text"><strong>Kategoria:</strong> @(product.Category?.Name ?? "Brak")</p>
+                    <p class="card-text"><strong>Dostępność:</strong> @(product.Stock?.ToString() ?? "Brak danych") szt.</p>
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="@product.Id" />
+                        <button type="submit" class="btn btn-primary">Dodaj do koszyka</button>
+                    </form>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning mt-2">Edytuj</a>
+                        <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger mt-2">Usuń</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <style>
+        .card {
+            height: 100%;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+}

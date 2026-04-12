@@ -1,0 +1,49 @@
+﻿@model E_Store_Sentiment_Analysis_Thesis.Models.Product
+
+
+@{
+    ViewData["Title"] = "Edytuj produkt title";
+}
+
+<h2>Edytuj produkt h2</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="Name" class="control-label">Podaj nazwę :</label>
+        <input asp-for="Name" class="form-control" required maxlength="150" oninvalid="this.setCustomValidity('Nazwa produktu jest wymagana, i nie moze przekroczyć 150 znaków.')" oninput="this.setCustomValidity('')" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Price" class="control-label">Wprowadź cenę :</label>
+        <input asp-for="Price" type="number" value="@Model.Price" step="0.01" class="form-control" required oninvalid="this.setCustomValidity('Cena jest wymagana i musi być liczbą.')" oninput="this.setCustomValidity('')" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CategoryId" class="control-label">Wybierz kategorię :</label>
+        <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description" class="control-label">(Opcjonalnie) Podaj opis :</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Stock" class="control-label">Wprowadź ilość :</label>
+        <input asp-for="Stock" type="number" class="form-control" oninvalid="this.setCustomValidity('Ilość musi być liczbą.')" oninput="this.setCustomValidity('')" />
+        <span asp-validation-for="Stock" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Zapisz</button>
+    <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+</form>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

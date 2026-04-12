@@ -1,0 +1,19 @@
+﻿@model E_Store_Sentiment_Analysis_Thesis.Models.Product
+
+<h2>Potwierdzenie usunięcia</h2>
+
+<p>Czy na pewno chcesz usunąć produkt : <strong>@Model.Name</strong>?</p>
+<p>
+    Szczegóły produktu :
+    <br />Kategoria : <strong>@Model.Category.Name</strong>
+    <br />Opis : <strong>@Model.Description</strong>
+    <br />Utworzono : <strong>@Model.CreatedAt</strong>
+
+</p>
+
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Usuń</button>
+    <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+</form>

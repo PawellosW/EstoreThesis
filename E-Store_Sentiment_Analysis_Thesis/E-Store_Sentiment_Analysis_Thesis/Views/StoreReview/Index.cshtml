@@ -1,0 +1,56 @@
+﻿@model List<E_Store_Sentiment_Analysis_Thesis.Models.Review>
+
+
+<h2>Opinie o sklepie</h2>
+
+
+<form asp-action="AddStoreReview" method="post">
+    <div class="form-group">
+        <label for="text">Twoja opinia :</label>
+        <textarea name="text" id="text" class="form-control" rows="4"></textarea>
+        
+        @if (ViewData.ModelState.ContainsKey("Text"))
+        {
+            <span class="text-danger">@ViewData.ModelState["Text"].Errors.FirstOrDefault()?.ErrorMessage</span>
+        }
+    </div>
+    <button type="submit" class="btn btn-primary">Dodaj opinię</button>
+</form>
+
+<hr />
+
+<div class="reviews">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var review in Model)
+        {
+            <div class="review d-flex mb-3 p-2 border rounded bg-light">
+                <!-- Avatar (jeśli masz w User np. Initials/AvatarUrl) -->
+                <div class="me-3">
+                    <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:40px; height:40px;">
+                        @review.User?.FirstName?[0] <!-- pierwsza litera nicku -->
+                    </div>
+                </div>
+
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between">
+                        <strong>@review.User?.FirstName</strong>
+                        <small class="text-muted">@review.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
+                    </div>
+                    <p class="mb-1">@review.Text</p>
+
+                    <!-- "Podobne do FB" - np. mini sekcja akcji -->
+                    <div>
+                        <a href="#" class="text-muted me-3">👍 Lubię to</a>
+                        <a href="#" class="text-muted">💬 Odpowiedz</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="text-muted">Brak opinii – bądź pierwszy!</p>
+    }
+</div>

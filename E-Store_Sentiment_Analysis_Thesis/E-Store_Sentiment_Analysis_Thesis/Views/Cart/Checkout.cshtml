@@ -1,0 +1,53 @@
+﻿@model List<E_Store_Sentiment_Analysis_Thesis.Models.CartItem>
+@{
+    ViewData["Title"] = "Podsumowanie zamówienia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Podsumowanie zamówienia</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Produkt</th>
+                <th>Cena jednostkowa</th>
+                <th>Ilość</th>
+                <th>Suma</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Total.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <p><strong>Całkowita suma:</strong> @Model.Sum(item => item.Total).ToString("C")</p>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <p>@error.ErrorMessage</p>
+            }
+        </div>
+    }
+
+    <form asp-controller="Orders" asp-action="ConfirmCheckout" method="post">
+        <button type="submit" class="btn btn-success">Potwierdź zamówienie</button>
+    </form>
+}
+else
+{
+    <p>Koszyk jest pusty.</p>
+}
+
+<a asp-controller="Products" asp-action="Index" class="btn btn-secondary">Wróć do zakupów</a>
