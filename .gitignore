@@ -408,7 +408,7 @@ FodyWeavers.xsd
 # Ignoruj pliki modeli (Bielik)
 *.gguf
 *.bin
-models/
+
 
 
 # Środowisko wirtualne Pythona
