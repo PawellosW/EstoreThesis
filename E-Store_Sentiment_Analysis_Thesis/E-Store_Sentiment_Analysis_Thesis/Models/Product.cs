@@ -12,7 +12,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Models
     {
         [Key]
         [Column("id")]
-        public int Id { get; set; }
+        public int Id { get;  set; }
 
         [Required]
         [MaxLength(100)]

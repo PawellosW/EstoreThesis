@@ -33,6 +33,7 @@ namespace E_Store_Sentiment_Analysis_Thesis
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IStoreReviewService, StoreReviewService>();
+            services.AddScoped<ISentimentParserService, SentimentParserService>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {

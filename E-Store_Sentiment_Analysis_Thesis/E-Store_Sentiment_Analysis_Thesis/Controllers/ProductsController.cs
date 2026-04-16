@@ -21,10 +21,12 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductService _service;
+        private readonly ISentimentParserService _parser;
 
-        public ProductsController(IProductService service)
+        public ProductsController(IProductService service, ISentimentParserService parserService)
         {
             _service = service;
+            _parser = parserService;
         }
 
         // LISTA PRODUKTÓW
@@ -134,6 +136,26 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
                 return NotFound();
 
             return View(product);
+        }
+
+        public IActionResult TestParser()
+        {
+            string rawAiData = @"
+    ```json
+    {
+        ""ReviewText"": ""Produkt jest dobrej jakości i zgodny z opisem. Cena mogłaby być trochę niższa, ale tragedii nie ma. Czas dostawy zgodny z informacją na stronie. Strona sklepu działała sprawnie i łatwo było znaleźć interesujący mnie model."",
+        ""PricEscorE"": null,
+        ""QualityScorE"": 4.0,
+        ""DeliveryScorE"": 5.0,
+        ""ServiceScorE"": 4.0,
+        ""OverallScorE"": 4.0
+    }
+    ```";
+            // Wywołujemy Twój serwis
+            var results = _parser.ParseMultipleAiOutputs(rawAiData);
+
+            // Zwracamy to jako JSON do przeglądarki, żeby zobaczyć, co wypluł C#
+            return Json(results);
         }
     }
 }
