@@ -34,6 +34,7 @@ namespace E_Store_Sentiment_Analysis_Thesis
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IStoreReviewService, StoreReviewService>();
             services.AddScoped<ISentimentParserService, SentimentParserService>();
+            services.AddScoped<IDashboardAnalysisService, DashboardAnalysisService>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {

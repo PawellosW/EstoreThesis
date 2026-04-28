@@ -10,10 +10,10 @@ namespace E_Store_Sentiment_Analysis_Thesis.Models.DTO
     public class ReviewAnalysisDto
     {
         public string ReviewText { get; set; }
-        public float? PriceScore { get; set; }
-        public float? QualityScore { get; set; }
-        public float? DeliveryScore { get; set; }
-        public float? ServiceScore { get; set; }
-        public float? OverallScore { get; set; }
+        public decimal? PriceScore { get; set; }
+        public decimal? QualityScore { get; set; }
+        public decimal? DeliveryScore { get; set; }
+        public decimal? ServiceScore { get; set; }
+        public decimal? OverallScore { get; set; }
     }
     }

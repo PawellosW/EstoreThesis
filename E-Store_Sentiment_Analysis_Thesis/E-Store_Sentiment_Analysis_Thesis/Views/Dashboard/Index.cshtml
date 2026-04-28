@@ -1,5 +1,48 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model List<E_Store_Sentiment_Analysis_Thesis.Models.ReviewAnalysis>
+
+<div class="container mt-4">
+    <h2>Panel Analityczny (Wersja Minimalistyczna)</h2>
+
+    <form asp-controller="Dashboard" asp-action="ImportManualResults" method="post" class="mb-4 mt-3">
+        <button type="submit" class="btn btn-success">
+            Pobierz wyniki analizy z pliku
+        </button>
+    </form>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID Opinii (ReviewId)</th>
+                <th>Jakość</th>
+                <th>Cena</th>
+                <th>Dostawa</th>
+                <th>Obsługa</th>
+                <th>Ocena Ogólna</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ReviewId</td>
+                        <td>@item.QualityScore</td>
+                        <td>@item.PriceScore</td>
+                        <td>@item.DeliveryScore</td>
+                        <td>@item.ServiceScore</td>
+                        <td><strong>@item.OverallScore</strong></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center text-muted">
+                        Brak przeanalizowanych danych w bazie. Kliknij przycisk powyżej, aby załadować wyniki.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
