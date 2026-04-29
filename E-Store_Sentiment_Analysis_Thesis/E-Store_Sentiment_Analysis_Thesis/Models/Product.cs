@@ -38,5 +38,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Models
 
         [Column("stock")]
         public int? Stock { get; set; }
+
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

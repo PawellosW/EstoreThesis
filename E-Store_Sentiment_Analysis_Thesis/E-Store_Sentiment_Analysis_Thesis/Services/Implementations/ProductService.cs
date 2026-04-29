@@ -18,7 +18,12 @@ namespace E_Store_Sentiment_Analysis_Thesis.Services.Implementations
             _context = context;
         }
 
-
+        public async Task AddReviewAsync(Review review)
+        {
+            review.CreatedAt = DateTime.Now;
+            _context.Reviews.Add(review);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync(int? categoryId)
         {
@@ -36,6 +41,8 @@ namespace E_Store_Sentiment_Analysis_Thesis.Services.Implementations
         {
             return await _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.Reviews) // Pobierz opinie
+                .ThenInclude(r => r.User) // I autorów tych opinii
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
 

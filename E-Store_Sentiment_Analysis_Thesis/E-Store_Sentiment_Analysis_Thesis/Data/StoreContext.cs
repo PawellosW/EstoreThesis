@@ -52,7 +52,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Data
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Product)
-                .WithMany()
+                .WithMany(p => p.Reviews)
                 .HasForeignKey(r => r.ProductId)
                 .IsRequired(false);
 

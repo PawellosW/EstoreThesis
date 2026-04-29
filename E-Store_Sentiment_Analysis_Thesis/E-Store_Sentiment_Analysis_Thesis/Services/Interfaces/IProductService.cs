@@ -9,7 +9,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Services.Interfaces
 {
     public interface IProductService
     {
-       
+        Task AddReviewAsync(Review review);
         Task<IEnumerable<Product>> GetAllProductsAsync(int? categoryId);
         Task<Product> GetProductByIdAsync(int id);
         Task<IEnumerable<Category>> GetAllCategoriesAsync();

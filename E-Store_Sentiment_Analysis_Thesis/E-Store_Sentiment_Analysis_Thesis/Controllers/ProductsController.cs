@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
-
+using System.Security.Claims;
 
 namespace E_Store_Sentiment_Analysis_Thesis.Controllers
 {
@@ -138,24 +138,31 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
             return View(product);
         }
 
-        public IActionResult TestParser()
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddProductReview(int productId, string text)
         {
-            string rawAiData = @"
-    ```json
-    {
-        ""ReviewText"": ""Produkt jest dobrej jakości i zgodny z opisem. Cena mogłaby być trochę niższa, ale tragedii nie ma. Czas dostawy zgodny z informacją na stronie. Strona sklepu działała sprawnie i łatwo było znaleźć interesujący mnie model."",
-        ""PricEscorE"": null,
-        ""QualityScorE"": 4.0,
-        ""DeliveryScorE"": 5.0,
-        ""ServiceScorE"": 4.0,
-        ""OverallScorE"": 4.0
-    }
-    ```";
-            // Wywołujemy Twój serwis
-            var results = _parser.ParseMultipleAiOutputs(rawAiData);
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                // Jeśli pusta opinia, po prostu wróć do szczegółów
+                return RedirectToAction(nameof(Details), new { id = productId });
+            }
 
-            // Zwracamy to jako JSON do przeglądarki, żeby zobaczyć, co wypluł C#
-            return Json(results);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var review = new Review
+            {
+                UserId = userId,
+                ProductId = productId,
+                Text = text,
+                CreatedAt = DateTime.Now
+            };
+
+            await _service.AddReviewAsync(review);
+
+            return RedirectToAction(nameof(Details), new { id = productId });
         }
+
+
     }
 }
