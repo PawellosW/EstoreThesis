@@ -18,9 +18,9 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
 
         public IActionResult Index()
         {
-            var model = _dashboardService.GetAllAnalyses();
+            var model = _dashboardService.GetDashboardSummary();
 
-           
+
             return View(model);
         }
 

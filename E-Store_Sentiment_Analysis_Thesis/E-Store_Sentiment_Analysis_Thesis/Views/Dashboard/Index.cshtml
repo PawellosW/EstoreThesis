@@ -1,48 +1,56 @@
-﻿@model List<E_Store_Sentiment_Analysis_Thesis.Models.ReviewAnalysis>
+﻿@model E_Store_Sentiment_Analysis_Thesis.ViewModels.DashboardViewModel
 
-<div class="container mt-4">
-    <h2>Panel Analityczny (Wersja Minimalistyczna)</h2>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Dashboard Analityczny (Warstwa 1)</h2>
 
-    <form asp-controller="Dashboard" asp-action="ImportManualResults" method="post" class="mb-4 mt-3">
-        <button type="submit" class="btn btn-success">
-            Pobierz wyniki analizy z pliku
-        </button>
-    </form>
+        <form asp-controller="Dashboard" asp-action="ImportManualResults" method="post">
+            <button type="submit" class="btn btn-primary shadow-sm">
+                <i class="bi bi-file-earmark-arrow-down"></i> Importuj najnowsze analizy
+            </button>
+        </form>
+    </div>
 
-    <table class="table table-striped table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>ID Opinii (ReviewId)</th>
-                <th>Jakość</th>
-                <th>Cena</th>
-                <th>Dostawa</th>
-                <th>Obsługa</th>
-                <th>Ocena Ogólna</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.ReviewId</td>
-                        <td>@item.QualityScore</td>
-                        <td>@item.PriceScore</td>
-                        <td>@item.DeliveryScore</td>
-                        <td>@item.ServiceScore</td>
-                        <td><strong>@item.OverallScore</strong></td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="6" class="text-center text-muted">
-                        Brak przeanalizowanych danych w bazie. Kliknij przycisk powyżej, aby załadować wyniki.
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-primary text-white text-center p-3">
+                <h5>Przeanalizowano łącznie</h5>
+                <h2 class="display-4 fw-bold">@Model.TotalAnalyzedReviews</h2>
+                <small>opinii klientów</small>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm bg-dark text-white text-center p-3">
+                <h5>Ogólny Sentyment Sklepu</h5>
+                <h2 class="display-4 fw-bold text-warning">@Model.AverageOverall / 5.0</h2>
+                <small>średnia ze wszystkich aspektów</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm p-2">
+                <h6 class="text-muted text-uppercase small">Jakość Produktu</h6>
+                <h3 class="fw-bold">@Model.AverageQuality</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm p-2">
+                <h6 class="text-muted text-uppercase small">Cena</h6>
+                <h3 class="fw-bold">@Model.AveragePrice</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm p-2">
+                <h6 class="text-muted text-uppercase small">Dostawa</h6>
+                <h3 class="fw-bold">@Model.AverageDelivery</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm p-2">
+                <h6 class="text-muted text-uppercase small">Obsługa Klienta</h6>
+                <h3 class="fw-bold">@Model.AverageService</h3>
+            </div>
+        </div>
+    </div>
 </div>

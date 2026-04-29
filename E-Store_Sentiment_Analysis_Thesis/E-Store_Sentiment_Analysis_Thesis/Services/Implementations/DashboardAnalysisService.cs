@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using E_Store_Sentiment_Analysis_Thesis.Data;
 using E_Store_Sentiment_Analysis_Thesis.Models;
 using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
+using E_Store_Sentiment_Analysis_Thesis.ViewModels;
 
 namespace E_Store_Sentiment_Analysis_Thesis.Services.Implementations
 {
@@ -58,6 +59,37 @@ namespace E_Store_Sentiment_Analysis_Thesis.Services.Implementations
                 });
             }
             await _context.SaveChangesAsync();
+        }
+
+
+        public DashboardViewModel GetDashboardSummary()
+        {
+            // Pobieramy wszystkie analizy z bazy
+            var allAnalyses = _context.ReviewAnalyses.ToList();
+            var model = new DashboardViewModel();
+
+            model.TotalAnalyzedReviews = allAnalyses.Count;
+
+            if (allAnalyses.Any())
+            {
+                // Liczymy średnie (odrzucamy wartości null, jeśli jakieś były)
+                model.AverageQuality = allAnalyses.Average(a => a.QualityScore) ?? 0;
+                model.AveragePrice = allAnalyses.Average(a => a.PriceScore) ?? 0;
+                model.AverageDelivery = allAnalyses.Average(a => a.DeliveryScore) ?? 0;
+                model.AverageService = allAnalyses.Average(a => a.ServiceScore) ?? 0;
+                model.AverageOverall = allAnalyses.Average(a => a.OverallScore) ?? 0;
+
+                // Zaokrąglamy do 2 miejsc po przecinku
+                model.AverageQuality = Math.Round(model.AverageQuality, 2);
+                model.AveragePrice = Math.Round(model.AveragePrice, 2);
+                model.AverageDelivery = Math.Round(model.AverageDelivery, 2);
+                model.AverageService = Math.Round(model.AverageService, 2);
+                model.AverageOverall = Math.Round(model.AverageOverall, 2);
+            }
+
+        
+
+            return model;
         }
 
         public List<ReviewAnalysis> GetAllAnalyses()
