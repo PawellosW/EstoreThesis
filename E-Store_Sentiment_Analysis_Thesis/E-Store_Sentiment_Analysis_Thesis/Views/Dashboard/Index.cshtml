@@ -9,6 +9,19 @@
                 <i class="bi bi-file-earmark-arrow-down"></i> Importuj najnowsze analizy
             </button>
         </form>
+
+
+        <form asp-action="TriggerAnalysis" method="post">
+            <button type="submit" class="btn btn-warning shadow-sm">
+                <i class="fas fa-robot"></i> Uruchom Inteligentną Analizę
+            </button>
+        </form>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success mt-3">@TempData["Success"]</div>
+        }
+
     </div>
 
     <div class="row g-4">

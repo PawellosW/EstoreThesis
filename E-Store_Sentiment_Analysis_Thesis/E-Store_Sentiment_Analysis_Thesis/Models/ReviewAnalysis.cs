@@ -10,19 +10,34 @@ namespace E_Store_Sentiment_Analysis_Thesis.Models
     public class ReviewAnalysis
     {
         [Key]
+        [Column("id")]
         public int Id { get; set; }
 
-        [Required]
+        [Column("review_id")]
         public int ReviewId { get; set; }
+
+        [Column("price_score")]
+        public decimal? PriceScore { get; set; }
+
+        [Column("quality_score")]
+        public decimal? QualityScore { get; set; }
+
+        [Column("delivery_score")]
+        public decimal? DeliveryScore { get; set; }
+
+        [Column("service_score")]
+        public decimal? ServiceScore { get; set; }
+
+        [Column("overall_score")]
+        public decimal? OverallScore { get; set; }
+
+        
+        [Column("is_urgent")]
+        public bool? IsUrgent { get; set; }
 
         [ForeignKey("ReviewId")]
         public Review Review { get; set; }
 
 
-        public decimal? PriceScore { get; set; }
-        public decimal? QualityScore { get; set; }
-        public decimal? DeliveryScore { get; set; }
-        public decimal? ServiceScore { get; set; }
-        public decimal? OverallScore { get; set; }
     }
 }

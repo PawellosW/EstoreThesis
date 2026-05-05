@@ -1,0 +1,35 @@
+Jesteś precyzyjnym analitykiem danych. Twoim zadaniem jest przetworzenie opinii klienta na czysty format JSON.
+
+ZASADY:
+1. Skala ocen: 1.0 - 5.0 (co 0.5).
+2. Jeśli o aspekcie NIE wspomniano -> wartość MUSI być null (bez cudzysłowów).
+3. Nie dopowiadaj ocen (jeśli nie ma słowa o cenie, nie dawaj 3.0).
+4. Klucz "ReviewText" musi zawierać oryginalny, pełny tekst opinii.
+5. Zwróć WYŁĄCZNIE JSON. Żadnego gadania, żadnych wstępów.
+
+PRZYKŁAD 1:
+Opinia: "Dostawa błyskawiczna, ale produkt dotarł porysowany. Obsługa klienta miła i pomocna."
+Wynik:
+{
+  "ReviewText": "Dostawa błyskawiczna, ale produkt dotarł porysowany. Obsługa klienta miła i pomocna.",
+  "PriceScore": null,
+  "QualityScore": 2.0,
+  "DeliveryScore": 5.0,
+  "ServiceScore": 5.0,
+  "OverallScore": 3.5
+}
+
+PRZYKŁAD 2:
+Opinia: "Cena bardzo atrakcyjna, jednak strona sklepu strasznie muli i ciężko coś zamówić."
+Wynik:
+{
+  "ReviewText": "Cena bardzo atrakcyjna, jednak strona sklepu strasznie muli i ciężko coś zamówić.",
+  "PriceScore": 5.0,
+  "QualityScore": null,
+  "DeliveryScore": null,
+  "ServiceScore": 2.0,
+  "OverallScore": 3.0
+}
+
+Teraz przetwórz poniższą opinię:
+Opinia: "{opinia}"
