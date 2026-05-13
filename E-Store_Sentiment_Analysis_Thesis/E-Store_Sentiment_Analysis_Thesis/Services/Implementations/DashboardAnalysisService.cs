@@ -20,44 +20,27 @@ namespace E_Store_Sentiment_Analysis_Thesis.Services.Implementations
             _context = context;
             _parser = parser;
         }
-       
 
-        public async Task SaveAnalysisResultToDb(string outputFilePath)
+
+        public async Task SaveSingleAnalysisResultToDb(int reviewId, string rawAiOutput)
         {
+            // 1. Używamy Twojego parsera (teraz dla jednego wyniku)
+            var dto = _parser.ParseSingleAiOutput(rawAiOutput);
 
-            if (!System.IO.File.Exists(outputFilePath))
+            if (dto == null) return; // Jeśli AI wyrzuciło bełkot, ignorujemy
+
+            // 2. Tworzymy obiekt analizy bezpośrednio dla ID przesłanego z Pythona
+            var analysis = new ReviewAnalysis
             {
-                throw new FileNotFoundException("Nie znaleziono pliku pod ścieżką: " + outputFilePath);
-            }
+                ReviewId = reviewId,
+                QualityScore = dto.QualityScore,
+                PriceScore = dto.PriceScore,
+                DeliveryScore = dto.DeliveryScore,
+                ServiceScore = dto.ServiceScore,
+                OverallScore = dto.OverallScore
+            };
 
-            string rawAiOutput = await System.IO.File.ReadAllTextAsync(outputFilePath);
-
-            var results = _parser.ParseMultipleAiOutputs(rawAiOutput);
-
-            // pobiera same ID opinii wykorzystanych już w analizie
-            var usedIds = _context.ReviewAnalyses.Select(a => a.ReviewId).ToList();
-            // pobiera Id opinii, które nie zostały wykorzystane w usedIds
-            var freeIds = _context.Reviews
-                .Where(r => !usedIds.Contains(r.Id))
-                .Select(r => r.Id)
-                .ToList();
-
-            for (int i = 0; i < results.Count; i++)
-            {
-                if (i >= freeIds.Count) break;
-
-                var dto = results[i];
-                _context.ReviewAnalyses.Add(new ReviewAnalysis
-                {
-                    ReviewId = freeIds[i],
-                    QualityScore = dto.QualityScore,
-                    PriceScore = dto.PriceScore,
-                    DeliveryScore = dto.DeliveryScore,
-                    ServiceScore = dto.ServiceScore,
-                    OverallScore = dto.OverallScore
-                    
-                });
-            }
+            _context.ReviewAnalyses.Add(analysis);
             await _context.SaveChangesAsync();
         }
 

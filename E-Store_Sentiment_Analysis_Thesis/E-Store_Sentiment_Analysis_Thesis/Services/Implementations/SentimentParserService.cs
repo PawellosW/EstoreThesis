@@ -14,49 +14,47 @@ namespace E_Store_Sentiment_Analysis_Thesis.Services.Implementations
     public class SentimentParserService : ISentimentParserService
     {
 
-        List<ReviewAnalysisDto> ISentimentParserService.ParseMultipleAiOutputs(string rawOutput)
-        {
-            var results = new List<ReviewAnalysisDto>();
-
-            if (string.IsNullOrWhiteSpace(rawOutput))
-                return results;
-
-            // KROK 1: Czyszczenie "manier" modelu LLM. 
-            // Zamieniamy każde "ScorE" (niezależnie od wielkości liter) na "Score".
-            // To załatwi problem z "PricEscorE", "QualityScorE" itd.
-            string cleanedOutput = Regex.Replace(rawOutput, "ScorE", "Score", RegexOptions.IgnoreCase);
-
-            // KROK 2: Wyciąganie poszczególnych obiektów JSON.
-            // Szukamy tekstu między klamrami { }, ale "leniwie" (*?), 
-            // żeby nie połączyć wszystkich opinii w jeden wielki blok.
-            var matches = Regex.Matches(cleanedOutput, @"\{.*?\}", RegexOptions.Singleline);
-
-            var options = new JsonSerializerOptions
+        
+            private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true // Ignoruje wielkość liter przy dopasowywaniu do DTO
             };
 
-            // KROK 3: Deserializacja każdego znalezionego kawałka
-            foreach (Match match in matches)
+            /// <summary>
+            /// NOWA METODA: Parsuje pojedynczy wynik wysłany przez Master Workera.
+            /// </summary>
+            public ReviewAnalysisDto ParseSingleAiOutput(string rawOutput)
             {
+                if (string.IsNullOrWhiteSpace(rawOutput))
+                    return null;
+
                 try
                 {
-                    var dto = JsonSerializer.Deserialize<ReviewAnalysisDto>(match.Value, options);
+                    // KROK 1: Czyszczenie "manier" modelu (np. ScorE -> Score)
+                    string cleaned = CleanRawString(rawOutput);
 
-                    if (dto != null)
-                    {
-                        results.Add(dto);
-                    }
+                    // KROK 2: Wyciągnięcie JSONa (na wypadek, gdyby model coś dopisał przed/po klamrach)
+                    var match = Regex.Match(cleaned, @"\{.*?\}", RegexOptions.Singleline);
+
+                    if (!match.Success)
+                        return null;
+
+                    // KROK 3: Deserializacja
+                    return JsonSerializer.Deserialize<ReviewAnalysisDto>(match.Value, _jsonOptions);
                 }
                 catch (JsonException)
                 {
-                    // Jeśli jeden JSON jest ucięty lub błędny, logujemy błąd 
-                    // i przechodzimy do następnego, żeby nie wywalać całej analizy.
-                    continue;
+                    // Logowanie błędu (opcjonalnie)
+                    return null;
                 }
             }
 
-            return results;
-        }
+            
+
+            // Pomocnicza metoda, żeby nie powtarzać Regexa do czyszczenia tekstu
+            private string CleanRawString(string input)
+            {
+                return Regex.Replace(input, "ScorE", "Score", RegexOptions.IgnoreCase);
+            }
     }
 }

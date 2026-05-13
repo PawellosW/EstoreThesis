@@ -9,6 +9,6 @@ namespace E_Store_Sentiment_Analysis_Thesis.Services.Interfaces
 {
     public interface ISentimentParserService
     {
-        List<ReviewAnalysisDto> ParseMultipleAiOutputs(string rawOutput);
+        ReviewAnalysisDto ParseSingleAiOutput(string rawOutput);
     }
 }

@@ -2,68 +2,80 @@
 
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Dashboard Analityczny (Warstwa 1)</h2>
+        <div>
+            <h2>Dashboard Analityczny</h2>
+            <p class="text-muted small">System analizy aspektowej opartej na modelu Bielik</p>
+        </div>
 
-        <form asp-controller="Dashboard" asp-action="ImportManualResults" method="post">
-            <button type="submit" class="btn btn-primary shadow-sm">
-                <i class="bi bi-file-earmark-arrow-down"></i> Importuj najnowsze analizy
-            </button>
-        </form>
-
-
-        <form asp-action="TriggerAnalysis" method="post">
-            <button type="submit" class="btn btn-warning shadow-sm">
-                <i class="fas fa-robot"></i> Uruchom Inteligentną Analizę
-            </button>
-        </form>
-
-        @if (TempData["Success"] != null)
-        {
-            <div class="alert alert-success mt-3">@TempData["Success"]</div>
-        }
-
+        <div class="text-end">
+            <form asp-action="TriggerAnalysis" method="post" id="analysisForm">
+                <button type="submit" class="btn btn-warning shadow-sm fw-bold" id="btnRun">
+                    <i class="fas fa-robot"></i> Uruchom Inteligentną Analizę
+                </button>
+            </form>
+            <div id="loadingStatus" class="mt-2 d-none">
+                <div class="spinner-border spinner-border-sm text-warning" role="status"></div>
+                <span class="ms-2 small text-muted">Analiza w toku... Odśwież stronę za chwilę.</span>
+            </div>
+        </div>
     </div>
+
+    @if (TempData["Success"] != null)
+    {
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>}
 
     <div class="row g-4">
+        <!-- Główna statystyka -->
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm bg-primary text-white text-center p-3">
-                <h5>Przeanalizowano łącznie</h5>
+            <div class="card border-0 shadow-sm bg-primary text-white text-center p-4">
+                <h6 class="text-uppercase small" style="opacity: 0.8">Przeanalizowano łącznie</h6>
                 <h2 class="display-4 fw-bold">@Model.TotalAnalyzedReviews</h2>
-                <small>opinii klientów</small>
+                <p class="mb-0 small">opinii w bazie danych</p>
             </div>
         </div>
 
+        <!-- Wynik ogólny -->
         <div class="col-md-8">
-            <div class="card border-0 shadow-sm bg-dark text-white text-center p-3">
-                <h5>Ogólny Sentyment Sklepu</h5>
-                <h2 class="display-4 fw-bold text-warning">@Model.AverageOverall / 5.0</h2>
-                <small>średnia ze wszystkich aspektów</small>
+            <div class="card border-0 shadow-sm bg-dark text-white text-center p-4 h-100 d-flex justify-content-center">
+                <h6 class="text-uppercase small text-muted">Wskaźnik Satysfakcji (Overall)</h6>
+                <h2 class="display-4 fw-bold text-warning">@Model.AverageOverall <span class="fs-4 text-muted">/ 5.0</span></h2>
+                <div class="progress mx-5 mt-2" style="height: 10px; background-color: #444;">
+                    <div class="progress-bar bg-warning" role="progressbar"
+                         style="width: @(Model.AverageOverall * 20)%"></div>
+                </div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm p-2">
-                <h6 class="text-muted text-uppercase small">Jakość Produktu</h6>
-                <h3 class="fw-bold">@Model.AverageQuality</h3>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm p-2">
-                <h6 class="text-muted text-uppercase small">Cena</h6>
-                <h3 class="fw-bold">@Model.AveragePrice</h3>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm p-2">
-                <h6 class="text-muted text-uppercase small">Dostawa</h6>
-                <h3 class="fw-bold">@Model.AverageDelivery</h3>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm p-2">
-                <h6 class="text-muted text-uppercase small">Obsługa Klienta</h6>
-                <h3 class="fw-bold">@Model.AverageService</h3>
-            </div>
+        <!-- Aspekty -->
+        @{ var aspects = new[] {
+                new { Label = "Jakość Produktu", Value = Model.AverageQuality, Icon = "fa-box" },
+                new { Label = "Cena", Value = Model.AveragePrice, Icon = "fa-tag" },
+                new { Label = "Dostawa", Value = Model.AverageDelivery, Icon = "fa-truck" },
+                new { Label = "Obsługa Klienta", Value = Model.AverageService, Icon = "fa-headset" }
+            }; }
+
+        @foreach (var aspect in aspects)
+        {
+<div class="col-md-3">
+    <div class="card border-0 shadow-sm text-center p-3">
+        <i class="fas @aspect.Icon text-primary mb-2"></i>
+        <h6 class="text-muted text-uppercase small mb-1">@aspect.Label</h6>
+        <h3 class="fw-bold mb-0">@aspect.Value</h3>
+        <div class="mt-2">
+            @for (int i = 1; i <= 5; i++)
+            {
+<i class="fas fa-star @(i <= Math.Round(aspect.Value) ? "text-warning" : "text-light")" style="font-size: 0.7rem;"></i>}
         </div>
     </div>
+</div>}
+    </div>
 </div>
+
+<script>// Prosta obsługa UI, żeby admin wiedział, że coś się dzieje
+    document.getElementById('analysisForm').onsubmit = function() {
+        document.getElementById('btnRun').disabled = true;
+        document.getElementById('loadingStatus').classList.remove('d-none');
+    };</script>

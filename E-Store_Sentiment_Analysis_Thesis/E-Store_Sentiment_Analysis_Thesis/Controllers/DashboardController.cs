@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
 using System.IO;
 using System.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace E_Store_Sentiment_Analysis_Thesis.Controllers
 {
     public class DashboardController : Controller
     {
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IDashboardAnalysisService _dashboardService;
 
-        public DashboardController(IDashboardAnalysisService dashboardService)
+        public DashboardController(IServiceScopeFactory serviceScopeFactory, IDashboardAnalysisService dashboardService)
         {
+            _serviceScopeFactory = serviceScopeFactory;
             _dashboardService = dashboardService;
         }
 
@@ -26,27 +29,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ImportManualResults()
-        {
-            
-            string filePath = @"C:\Users\lenovo\Desktop\wyniki_aspekty.txt";
-
-            try
-            {
-                // Kontroler tylko mówi CO zrobić, nie wie JAK czytany jest plik
-                await _dashboardService.SaveAnalysisResultToDb(filePath);
-                TempData["Success"] = "Dane zaimportowane pomyślnie!";
-            }
-            catch (Exception ex)
-            {
-                // Tutaj możesz obsłużyć błędy (np. brak pliku)
-                TempData["Error"] = "Błąd: " + ex.Message;
-            }
-
-
-            return RedirectToAction("Index");
-        }
+        
 
         [HttpPost]
         public IActionResult TriggerAnalysis()
@@ -55,23 +38,57 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
             string pythonScript = Path.Combine(Directory.GetCurrentDirectory(), "AnalysisModule", "aspects_rate_worker.py");
 
             // 2. Uruchomienie procesu w tle
-            Task.Run(() =>
+            Task.Run(async () =>
             {
                 try
                 {
                     ProcessStartInfo start = new ProcessStartInfo
                     {
                         FileName = "python", // Upewnij się, że python jest w zmiennych środowiskowych (PATH)
-                        Arguments = pythonScript,
+                        Arguments = $"\"{pythonScript}\"",
+                        WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "AnalysisModule"),
                         UseShellExecute = false,
                         CreateNoWindow = true,
                         RedirectStandardOutput = true,
                         RedirectStandardError = true
                     };
 
-                    using (Process process = Process.Start(start))
+                    using (Process process = new Process { StartInfo = start })
                     {
-                        // Tutaj proces sobie leci w tle systemu operacyjnego
+                        process.OutputDataReceived += (sender, e) =>  // ← usuń async
+                        {
+                            if (!string.IsNullOrEmpty(e.Data) && e.Data.StartsWith("###ID:"))
+                            {
+                                try
+                                {
+                                    var parts = e.Data.Split("###");
+                                    int id = int.Parse(parts[1].Replace("ID:", ""));
+                                    string output = parts[2].Replace("OUT:", "");
+
+                                    using (var scope = _serviceScopeFactory.CreateScope())
+                                    {
+                                        var service = scope.ServiceProvider.GetRequiredService<IDashboardAnalysisService>();
+                                        // .GetAwaiter().GetResult() zamiast await — bezpieczne w event handlerze
+                                        service.SaveSingleAnalysisResultToDb(id, output).GetAwaiter().GetResult();
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("[PARSE ERR] " + ex.Message); // ← teraz błędy będą widoczne
+                                }
+                            }
+                        };
+
+                        process.ErrorDataReceived += (sender, e) =>
+                        {
+                            if (!string.IsNullOrEmpty(e.Data))
+                                Console.WriteLine("[PYTHON ERR] " + e.Data);
+                        };
+
+                        process.Start();
+                        process.BeginOutputReadLine(); // Rozpocznij nasłuchiwanie
+                        process.BeginErrorReadLine();
+                        process.WaitForExit();
                     }
                 }
                 catch (Exception ex)
