@@ -417,3 +417,10 @@ venv/
 env/
 .env
 .env.*
+
+
+# Pliki tymczasowe/kopie zapasowe
+*.bak
+
+# Stare/archiwalne pliki robocze
+E-Store_Sentiment_Analysis_Thesis/E-Store_Sentiment_Analysis_Thesis/AnalysisModule/stare/
