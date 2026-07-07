@@ -1,2 +1,0 @@
-[2026-05-05 04:26:01.691764] BŁĄD TESTU: ('42S02', "[42S02] [Microsoft][ODBC SQL Server Driver][SQL Server]Invalid object name 'ReviewAnalysis'. (208) (SQLExecDirectW); [42S02] [Microsoft][ODBC SQL Server Driver][SQL Server]Statement(s) could not be prepared. (8180)")
-[2026-05-05 04:37:45.013764] Test zakończony sukcesem dla ID: 1
