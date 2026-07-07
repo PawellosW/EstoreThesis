@@ -63,8 +63,8 @@ namespace E_Store_Sentiment_Analysis_Thesis.Data
                 .IsRequired(false);
 
             modelBuilder.Entity<Review>()
-                .HasOne(r => r.ReviewAnalysis)     // Review ma jedną analizę
-                .WithOne(ra => ra.Review)          // Analiza ma jedną opinię
+                .HasOne(r => r.ReviewAnalysis)   
+                .WithOne(ra => ra.Review)       
                 .HasForeignKey<ReviewAnalysis>(ra => ra.ReviewId);
 
 

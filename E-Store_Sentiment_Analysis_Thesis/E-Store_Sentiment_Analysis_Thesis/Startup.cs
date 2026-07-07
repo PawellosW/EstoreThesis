@@ -35,6 +35,10 @@ namespace E_Store_Sentiment_Analysis_Thesis
             services.AddScoped<IStoreReviewService, StoreReviewService>();
             services.AddScoped<ISentimentParserService, SentimentParserService>();
             services.AddScoped<IDashboardAnalysisService, DashboardAnalysisService>();
+            services.AddHttpContextAccessor();
+            services.AddSession();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
@@ -67,7 +71,7 @@ namespace E_Store_Sentiment_Analysis_Thesis
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthentication();

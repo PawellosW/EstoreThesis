@@ -35,7 +35,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
         public IActionResult TriggerAnalysis()
         {
             // 1. Ścieżka do skryptu - najlepiej trzymać ją w folderze projektu
-            string pythonScript = Path.Combine(Directory.GetCurrentDirectory(), "AnalysisModule", "aspects_rate_worker.py");
+            string pythonScript = Path.Combine(Directory.GetCurrentDirectory(), "AnalysisModule", "master_worker.py");
 
             // 2. Uruchomienie procesu w tle
             Task.Run(async () =>

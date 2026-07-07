@@ -15,5 +15,6 @@ namespace E_Store_Sentiment_Analysis_Thesis.Models.DTO
         public decimal? DeliveryScore { get; set; }
         public decimal? ServiceScore { get; set; }
         public decimal? OverallScore { get; set; }
+        public bool? IsUrgent { get; set; }
     }
     }

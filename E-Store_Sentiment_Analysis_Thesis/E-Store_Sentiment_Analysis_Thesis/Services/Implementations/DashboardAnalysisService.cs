@@ -7,6 +7,7 @@ using E_Store_Sentiment_Analysis_Thesis.Data;
 using E_Store_Sentiment_Analysis_Thesis.Models;
 using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
 using E_Store_Sentiment_Analysis_Thesis.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace E_Store_Sentiment_Analysis_Thesis.Services.Implementations
 {
@@ -24,23 +25,35 @@ namespace E_Store_Sentiment_Analysis_Thesis.Services.Implementations
 
         public async Task SaveSingleAnalysisResultToDb(int reviewId, string rawAiOutput)
         {
-            // 1. Używamy Twojego parsera (teraz dla jednego wyniku)
+            
             var dto = _parser.ParseSingleAiOutput(rawAiOutput);
 
-            if (dto == null) return; // Jeśli AI wyrzuciło bełkot, ignorujemy
+            if (dto == null) return;
 
-            // 2. Tworzymy obiekt analizy bezpośrednio dla ID przesłanego z Pythona
-            var analysis = new ReviewAnalysis
+            var existingAnalysis = await _context.ReviewAnalyses
+            .FirstOrDefaultAsync(ra => ra.ReviewId == reviewId);
+
+            if (existingAnalysis == null)
             {
-                ReviewId = reviewId,
-                QualityScore = dto.QualityScore,
-                PriceScore = dto.PriceScore,
-                DeliveryScore = dto.DeliveryScore,
-                ServiceScore = dto.ServiceScore,
-                OverallScore = dto.OverallScore
-            };
+                var analysis = new ReviewAnalysis
+                {
+                    ReviewId = reviewId,
+                    QualityScore = dto.QualityScore,
+                    PriceScore = dto.PriceScore,
+                    DeliveryScore = dto.DeliveryScore,
+                    ServiceScore = dto.ServiceScore,
+                    OverallScore = dto.OverallScore,
+                    IsUrgent = dto.IsUrgent
+                   
+                };
 
-            _context.ReviewAnalyses.Add(analysis);
+                _context.ReviewAnalyses.Add(analysis);
+            }
+            else
+            {
+                existingAnalysis.IsUrgent = dto.IsUrgent;
+                _context.ReviewAnalyses.Update(existingAnalysis);
+            }
             await _context.SaveChangesAsync();
         }
 
@@ -52,6 +65,43 @@ namespace E_Store_Sentiment_Analysis_Thesis.Services.Implementations
             var model = new DashboardViewModel();
 
             model.TotalAnalyzedReviews = allAnalyses.Count;
+
+            model.TotalAspectsAnalyzed = allAnalyses
+                .Count(a => a.OverallScore != null);
+
+            model.TotalAlertsAnalyzed = allAnalyses
+                .Count(a => a.IsUrgent != null);
+
+            model.UrgentReviewsCount = allAnalyses
+                .Count(a => a.IsUrgent == true);
+
+            var today = DateTime.Today;
+
+           
+
+            // Poziom 1 — brak jakiegokolwiek rekordu analizy
+            model.PendingLevel1Count = _context.Reviews
+                .Count(r => !_context.ReviewAnalyses
+                    .Any(ra => ra.ReviewId == r.Id));
+
+            // Poziom 2 — jest rekord ale IsUrgent jest null
+            model.PendingLevel2Count = _context.Reviews
+                .Count(r => _context.ReviewAnalyses
+                    .Any(ra => ra.ReviewId == r.Id && ra.IsUrgent == null));
+
+
+            // Alerty szczegółowe
+            model.UrgentReviews = _context.ReviewAnalyses
+                .Where(ra => ra.IsUrgent == true)
+                .Join(_context.Reviews,
+                    ra => ra.ReviewId,
+                    r => r.Id,
+                    (ra, r) => new UrgentReviewItem
+                    {
+                        ReviewId = r.Id,
+                        ReviewText = r.Text
+                    })
+                .ToList();
 
             if (allAnalyses.Any())
             {

@@ -38,6 +38,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Models
         [ForeignKey("ReviewId")]
         public Review Review { get; set; }
 
+       
 
     }
 }
