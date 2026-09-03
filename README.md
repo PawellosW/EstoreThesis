@@ -9,12 +9,13 @@ Wyniki prezentowane są administratorowi na bieżąco w trakcie trwania analizy.
 
 ---
 
-## Technologie
+# Użyte Technologie
 
 | Technologia | Zastosowanie |
 |---|---|
 | C# / ASP.NET Core MVC | Framework aplikacji webowej, architektura MVC z warstwą serwisową |
 | Entity Framework Core | ORM, obsługa bazy danych i relacji między encjami |
+| BCrypt.Net | Hashowanie haseł |
 | Microsoft SQL Server | Relacyjna baza danych systemu |
 | Python | Worker analityczny — komunikacja z modelem językowym |
 | pyodbc | Połączenie workera z bazą danych |
@@ -22,7 +23,28 @@ Wyniki prezentowane są administratorowi na bieżąco w trakcie trwania analizy.
 | Docker | Konteneryzacja aplikacji |
 
 
-## Uruchomienie lokalne platformy e-commerce
+# Architektura i diagramy systemu
+
+## Ogólna architektura i przepływ danych
+
+Diagram przedstawia zarys ogólnej architektury systemu wraz z przepływem danych pomiędzy poszczególnymi modułami
+
+![Diagram architektury](docs/diagram_architektury.png)
+
+---
+
+### Diagram sekwencji: Proces analizy opinii
+
+Szczegółowy przebieg procesu analizy opinii klientów
+
+![Diagram sekwencji procesu analizy opinii](docs/diagram_sekwencji.png)
+
+
+
+
+# Instrukcje uruchomienia
+
+## 1. Uruchomienie lokalne platformy e-commerce
 
 ### Wymagania
 - [.NET 8 SDK](https://dotnet.microsoft.com/download)
@@ -51,7 +73,7 @@ Wyniki prezentowane są administratorowi na bieżąco w trakcie trwania analizy.
      następnie zaznacz i wykonaj resztę skryptu
 
 
-4. Uruchom aplikację. W tym samym katalogu wpisz (uruchomi się w przeglądarce):
+4. Uruchom aplikację. Otwórz konsolę tam gdzie plik .csproj i wpisz (uruchomi się w przeglądarce):
 ```bash
    dotnet run
 ```
@@ -60,7 +82,7 @@ Wyniki prezentowane są administratorowi na bieżąco w trakcie trwania analizy.
 
 
 
-## Uruchomienie lokalne modułu analitycznego
+## 2. Uruchomienie lokalne modułu analitycznego
 
 Moduł analityczny wymaga lokalnego modelu językowego Bielik 4.5B (lub pokrewny) i uruchamiany jest w momencie kliknięcia przez administratora przycisku „Uruchom analizę" w dashboardzie analitycznym.
 
@@ -96,7 +118,7 @@ Moduł analityczny wymaga lokalnego modelu językowego Bielik 4.5B (lub pokrewny
 
 
 
-## Uruchomienie przez Docker
+## 3. Uruchomienie przez Docker
 
 ### Wymagania
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
@@ -131,3 +153,4 @@ Moduł analityczny wymaga lokalnego modelu językowego Bielik 4.5B (lub pokrewny
 5. Aplikacja dostępna pod adresem: `http://localhost:8080`
 
 ---
+
