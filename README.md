@@ -40,7 +40,15 @@ Szczegółowy przebieg procesu analizy opinii klientów
 ![Diagram sekwencji procesu analizy opinii](docs/diagram_sekwencji.png)
 
 
+# Testy integracyjne modułu analitycznego z platformą e-commerce
 
+| Id testu | Krok testowy | Dane wejściowe / Akcja | Oczekiwany rezultat | Wynik |
+| :--- | :--- | :--- | :--- | :--- |
+| **TI-01** | Inicjalizacja procesu zewnętrznego z poziomu C#. | Wywołanie metody `TriggerAnalysis()` | Klasa `ProcessStartInfo` poprawnie odnajduje interpreter Pythona i uruchamia skrypt `master_worker.py` w tle, bez blokowania wątku głównego. | Pozytywny |
+| **TI-02** | Autonomiczne pobranie z bazy danych opinii do analizy przez skrypt Python. | Połączenie przez bibliotekę `pyodbc` | Skrypt poprawnie łączy się z bazą danych, wykonuje zapytanie `LEFT JOIN` i pobiera rekordy nieposiadające jeszcze analizy. | Pozytywny |
+| **TI-03** | Strumieniowanie wyników z Pythona do C#. | Wygenerowanie surowej odpowiedzi przez model Bielik | Python poprawnie strumieniuje dane wyjściowe w przyjętym protokole, C# poprawnie przechwytuje komunikat. | Pozytywny |
+| **TI-04** | Parsowanie danych wyjściowych w aplikacji C#. | — | Parser C# poprawnie izoluje identyfikator opinii oraz blok JSON, serwis poprawnie zamienia wynik na obiekt analizy. | Pozytywny |
+| **TI-05** | Zapis wyniku JSON do bazy danych. | Próba zapisu wyniku analizy w bazie danych | Wyniki analizy zostają zapisane w tabeli `review_analysis`. | Pozytywny |
 
 # Instrukcje uruchomienia
 
