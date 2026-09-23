@@ -27,6 +27,7 @@ CREATE TABLE products (
     created_at DATETIME2 NOT NULL DEFAULT GETDATE(),
     description NVARCHAR(500) NULL,
     stock INT NULL,
+	image_url NVARCHAR(255) NULL,
     CONSTRAINT FK_products_categories FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 

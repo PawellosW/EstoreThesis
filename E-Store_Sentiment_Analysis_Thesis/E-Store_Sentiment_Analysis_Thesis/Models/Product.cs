@@ -39,6 +39,10 @@ namespace E_Store_Sentiment_Analysis_Thesis.Models
         [Column("stock")]
         public int? Stock { get; set; }
 
+        [MaxLength(255)]
+        [Column("image_url")]
+        public string? ImageUrl { get; set; }
+
         public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

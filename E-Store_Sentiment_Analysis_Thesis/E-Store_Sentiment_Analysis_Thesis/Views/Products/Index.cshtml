@@ -70,30 +70,34 @@
 <div class="row">
     @foreach (var product in Model)
     {
+        
         <div class="col-md-4 mb-3">
             <div class="card">
-                <div class="card-body">
+                <a asp-action="Details" asp-route-id="@product.Id">
 
-                    <h5 class="card-title">
-                        <a asp-action="Details" asp-route-id="@product.Id">@product.Name</a>
-                    </h5>
+                    <img src="@(string.IsNullOrWhiteSpace(product.ImageUrl) ? "/images/image-placeholder.png" : product.ImageUrl)"
+                         onerror="this.onerror=null; this.src='/images/image-placeholder.png';"
+                         class="card-img-top product-image">
+                 
+                    <div class="card-body">
 
-                    <p class="card-text">@product.Description</p>
-                    <p class="card-text"><strong>Cena:</strong> @(product.Price?.ToString("C") ?? "Brak ceny")</p>
-                    <p class="card-text"><strong>Kategoria:</strong> @(product.Category?.Name ?? "Brak")</p>
-                    <p class="card-text"><strong>Dostępność:</strong> @(product.Stock?.ToString() ?? "Brak danych") szt.</p>
-                    <form asp-controller="Cart" asp-action="AddToCart" method="post">
-                        <input type="hidden" name="productId" value="@product.Id" />
-                        <button type="submit" class="btn btn-primary">Dodaj do koszyka</button>
-                    </form>
+                        <h5 class="card-title">
+                            @product.Name
+                        </h5>
+                    
+                    </div>
+
+                </a>
+
                     @if (User.IsInRole("Admin"))
                     {
                         <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning mt-2">Edytuj</a>
                         <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger mt-2">Usuń</a>
                     }
-                </div>
+                
             </div>
         </div>
+        
     }
 </div>
 
