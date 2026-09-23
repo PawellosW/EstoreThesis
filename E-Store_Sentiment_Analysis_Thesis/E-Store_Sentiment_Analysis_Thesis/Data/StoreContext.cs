@@ -67,7 +67,11 @@ namespace E_Store_Sentiment_Analysis_Thesis.Data
                 .WithOne(ra => ra.Review)       
                 .HasForeignKey<ReviewAnalysis>(ra => ra.ReviewId);
 
-
+            modelBuilder.Entity<ReviewAnalysis>().Property(r => r.PriceScore).HasPrecision(2, 1);
+            modelBuilder.Entity<ReviewAnalysis>().Property(r => r.QualityScore).HasPrecision(2, 1);
+            modelBuilder.Entity<ReviewAnalysis>().Property(r => r.DeliveryScore).HasPrecision(2, 1);
+            modelBuilder.Entity<ReviewAnalysis>().Property(r => r.ServiceScore).HasPrecision(2, 1);
+            modelBuilder.Entity<ReviewAnalysis>().Property(r => r.OverallScore).HasPrecision(2, 1);
         }
     }
 }
