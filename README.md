@@ -9,6 +9,21 @@ Wyniki prezentowane są administratorowi na bieżąco w trakcie trwania analizy.
 
 ---
 
+## Demo
+
+**Aplikacja:** https://estore-app.blackflower-539a1832.polandcentral.azurecontainerapps.io/
+
+Konto administratora :
+`admin_sql@admin.pl` / `PWAdminDemo!`
+
+Konto klienta:
+`EmanuelR.85@demo.pl` / `EmanuelDemo!`
+
+Środowisko demonstracyjne z danymi testowymi. Pierwsze wejście może potrwać
+kilkanaście sekund - baza wznawia się po okresie bezczynności.
+
+Szczegóły wdrożenia: [docs/deployment/Azure_Deployment.md](docs/deployment/Azure_Deployment.md)
+
 # Użyte Technologie
 
 | Technologia | Zastosowanie |
