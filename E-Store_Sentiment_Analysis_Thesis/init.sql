@@ -63,11 +63,11 @@ CREATE TABLE reviews (
 CREATE TABLE review_analysis (
     id INT IDENTITY(1,1) PRIMARY KEY,
     review_id INT NOT NULL,
-    price_score DECIMAL(2,1) NULL CHECK (price_score BETWEEN 1.0 AND 5.0),
-    quality_score DECIMAL(2,1) NULL CHECK (quality_score BETWEEN 1.0 AND 5.0),
-    delivery_score DECIMAL(2,1) NULL CHECK (delivery_score BETWEEN 1.0 AND 5.0),
-    service_score DECIMAL(2,1) NULL CHECK (service_score BETWEEN 1.0 AND 5.0),
-    overall_score DECIMAL(2,1) NULL CHECK (overall_score BETWEEN 1.0 AND 5.0),
+    price_score DECIMAL(2,1) NULL CHECK (price_score BETWEEN 0.0 AND 5.0),
+    quality_score DECIMAL(2,1) NULL CHECK (quality_score BETWEEN 0.0 AND 5.0),
+    delivery_score DECIMAL(2,1) NULL CHECK (delivery_score BETWEEN 0.0 AND 5.0),
+    service_score DECIMAL(2,1) NULL CHECK (service_score BETWEEN 0.0 AND 5.0),
+    overall_score DECIMAL(2,1) NULL CHECK (overall_score BETWEEN 0.0 AND 5.0),
     is_urgent BIT NULL,
     CONSTRAINT FK_reviewanalysis_reviews FOREIGN KEY (review_id) REFERENCES reviews(id)
 );
