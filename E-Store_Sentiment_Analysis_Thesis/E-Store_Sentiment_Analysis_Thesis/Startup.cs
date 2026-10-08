@@ -49,12 +49,15 @@ namespace E_Store_Sentiment_Analysis_Thesis
 
             services.AddSession();
             services.AddControllersWithViews();
+
             services.Configure<RequestLocalizationOptions>(options =>
             {
-                options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(CultureInfo.InvariantCulture);
-                options.SupportedCultures = new[] { CultureInfo.InvariantCulture };
-                options.SupportedUICultures = new[] { CultureInfo.InvariantCulture };
+                var culture = new CultureInfo("pl-PL");
+                options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(culture);
+                options.SupportedCultures = new[] { culture };
+                options.SupportedUICultures = new[] { culture };
             });
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
