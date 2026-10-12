@@ -7,9 +7,11 @@ using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
 using System.IO;
 using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authorization;
 
 namespace E_Store_Sentiment_Analysis_Thesis.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class DashboardController : Controller
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
@@ -32,9 +34,10 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
         
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult TriggerAnalysis()
         {
-            // 1. Ścieżka do skryptu - najlepiej trzymać ją w folderze projektu
+            // 1. Ścieżka do skryptu
             string pythonScript = Path.Combine(Directory.GetCurrentDirectory(), "AnalysisModule", "master_worker.py");
 
             // 2. Uruchomienie procesu w tle
