@@ -14,26 +14,57 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
+
             <ul class="navbar-nav mr-auto">
+
+
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Products" asp-action="Index">Produkty</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Cart" asp-action="Index">Koszyk</a>
                 </li>
+
+                
+                <li class="nav-item ms-auto">
+                    <a class="nav-link" asp-controller="StoreReview" asp-action="Index" > Zobacz opinie o sklepie </a>
+                </li>
+
             </ul>
+
+
             <ul class="navbar-nav">
+
                 @if (User.Identity.IsAuthenticated)
                 {
                     <li class="nav-item">
                         <span class="nav-link">Witaj, @User.Identity.Name</span>
                     </li>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a asp-controller="Orders" asp-action="Index" class="nav-link">
+                                Zamówienia
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-controller="Dashboard" asp-action="Index" class="nav-link">
+                                Dashboard
+                            </a>
+                        </li>
+                    }
+
                     <li class="nav-item">
                         <form asp-controller="Account" asp-action="Logout" method="post">
                             <button type="submit" class="nav-link btn btn-link">Wyloguj</button>
                         </form>
                     </li>
                 }
+
+
                 else
                 {
                     <li class="nav-item">
@@ -43,7 +74,11 @@
                         <a class="nav-link" asp-controller="Account" asp-action="Register">Zarejestruj</a>
                     </li>
                 }
+
             </ul>
+
+
+
         </div>
     </nav>
 

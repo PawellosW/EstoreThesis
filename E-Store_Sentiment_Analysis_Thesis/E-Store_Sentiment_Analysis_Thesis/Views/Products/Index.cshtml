@@ -38,30 +38,7 @@
         </li>
     }
 
-    <!-- Dodatkowe linki -->
-    <li class="nav-item ms-auto">
-        <a asp-controller="StoreReview" asp-action="Index" class="btn btn-link">
-            Zobacz opinie o sklepie
-        </a>
-    </li>
-
-    @if (User.IsInRole("Admin"))
-    {
-        <li class="nav-item">
-            <a asp-controller="Orders" asp-action="Index" class="btn btn-link">
-                Zamówienia
-            </a>
-        </li>
-    }
-
-    @if (User.IsInRole("Admin"))
-    {
-        <li class="nav-item">
-            <a asp-controller="Dashboard" asp-action="Index" class="btn btn-link">
-                Dashboard
-            </a>
-        </li>
-    }
+   
 
 </ul>
 
