@@ -17,6 +17,8 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IDashboardAnalysisService _dashboardService;
 
+        private static readonly bool DemoMode = true;
+
         public DashboardController(IServiceScopeFactory serviceScopeFactory, IDashboardAnalysisService dashboardService)
         {
             _serviceScopeFactory = serviceScopeFactory;
@@ -37,6 +39,13 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult TriggerAnalysis()
         {
+
+            if (DemoMode)
+            {
+                TempData["Success"] = "Uruchamianie analizy jest niedostępne w wersji demonstracyjnej.";
+                return RedirectToAction("Index");
+            }
+
             // 1. Ścieżka do skryptu
             string pythonScript = Path.Combine(Directory.GetCurrentDirectory(), "AnalysisModule", "master_worker.py");
 

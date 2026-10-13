@@ -2,6 +2,8 @@
 @using System.Globalization
 
 @{
+    var demoMode = true;
+
     var aspects = new[] {
         new { Label = "Jakość produktu",     Value = Model.AverageQuality,  Color = "bg-success" },
         new { Label = "Ocena ceny",          Value = Model.AveragePrice,    Color = "bg-info"    },
@@ -31,16 +33,25 @@
             </div>
             <form asp-action="TriggerAnalysis" method="post" id="analysisForm">
                 <button type="submit" class="btn btn-light text-primary font-weight-bold px-4 py-2 shadow-sm"
-                        id="btnRun">
+                        id="btnRun" disabled="@demoMode">
                     Uruchom analizę
                 </button>
             </form>
         </div>
-        <div id="loadingStatus" class="mt-3 text-white d-none">
-            <div class="spinner-border spinner-border-sm text-warning" role="status"></div>
-            <span class="ml-2 small">Przetwarzanie potoku LLM...</span>
-        </div>
+        
     </div>
+    @if (demoMode)
+    {
+        <div class="alert alert-info mb-4" role="alert">
+            <h6 class="alert-heading font-weight-bold">Wersja demonstracyjna</h6>
+            <p class="mb-2">Uruchamianie analizy w wersji demonstracyjnej jest wyłączone.</p>
+            <ul class="small mb-0">
+                <li>Moduł korzysta z lokalnego modelu językowego Bielik 4.5B (ok. 5 GB), który nie mieści się w darmowym hostingu.</li>
+                <li>Wyniki w panelu pochodzą z rzeczywistego procesu analizy, przeprowadzonego na zbiorze testowym.</li>
+                
+            </ul>
+        </div>
+    }
 
     @if (TempData["Success"] != null)
     {
@@ -149,9 +160,3 @@
 
 </div>
 
-<script>
-    document.getElementById('analysisForm').onsubmit = function () {
-        document.getElementById('btnRun').disabled = true;
-        document.getElementById('loadingStatus').classList.remove('d-none');
-    };
-</script>
