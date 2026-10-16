@@ -1,16 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using E_Store_Sentiment_Analysis_Thesis.Data;
-using E_Store_Sentiment_Analysis_Thesis.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
-using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
+using System.Threading.Tasks;
 
 namespace E_Store_Sentiment_Analysis_Thesis.Controllers
 {
@@ -43,7 +36,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
         [Authorize]
         public async Task<IActionResult> ConfirmCheckout()
         {
-            // 1. Tożsamość (zostaje w kontrolerze, bo to logika HTTP)
+           
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!int.TryParse(userIdString, out int userId) || userId == 0)
             {
@@ -73,8 +66,6 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
             _cartService.ClearCart();
             return RedirectToAction("OrderConfirmation");
         }
-
-
 
 
         public IActionResult OrderConfirmation()

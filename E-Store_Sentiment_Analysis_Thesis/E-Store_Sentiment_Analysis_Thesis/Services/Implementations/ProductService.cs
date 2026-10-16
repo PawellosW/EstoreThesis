@@ -41,8 +41,8 @@ namespace E_Store_Sentiment_Analysis_Thesis.Services.Implementations
         {
             return await _context.Products
                 .Include(p => p.Category)
-                .Include(p => p.Reviews) // Pobierz opinie
-                .ThenInclude(r => r.User) // I autorów tych opinii
+                .Include(p => p.Reviews)
+                .ThenInclude(r => r.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
 
@@ -53,7 +53,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Services.Implementations
 
         public async Task AddProductAsync(Product product)
         {
-            product.CreatedAt = DateTime.Now; // Logika biznesowa w serwisie!
+            product.CreatedAt = DateTime.Now;
             _context.Add(product);
             await _context.SaveChangesAsync();
         }

@@ -16,15 +16,13 @@
 
 
 <ul class="nav nav-tabs mb-3">
-    <!-- Link do wszystkich produktów -->
+   
     <li class="nav-item">
         <a class="nav-link @(ViewData["SelectedCategoryId"] == null ? "active" : "")"
            asp-action="Index">
             Wszystko
         </a>
     </li>
-
-    <!-- Linki do poszczególnych kategorii -->
 
 
     @foreach (var category in ViewBag.Categories)
@@ -58,7 +56,7 @@
                  
                     <div class="card-body">
 
-                        <h5 class="card-title">
+                        <h5 class="card-title" style="height: 30px;">
                             @product.Name
                         </h5>
                     

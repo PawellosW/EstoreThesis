@@ -1,17 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using E_Store_Sentiment_Analysis_Thesis.Data;
-using E_Store_Sentiment_Analysis_Thesis.Models;
-using System.Collections.Generic;
-using System.Linq;
-using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-
-using System;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace E_Store_Sentiment_Analysis_Thesis.Controllers
 {
@@ -47,7 +37,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
             var success = await _cartService.AddToCartAsync(productId, quantity);
             if (!success)
             {
-                return NotFound(); // Lub zwróć informację o braku na stanie
+                return NotFound();
             }
             return RedirectToAction("Index");
         }

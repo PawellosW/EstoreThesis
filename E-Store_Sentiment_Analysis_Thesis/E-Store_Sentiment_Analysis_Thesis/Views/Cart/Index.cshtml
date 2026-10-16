@@ -26,8 +26,7 @@
                     <td>@item.Price.ToString("C")</td>
                     <td>
 
-                        <!--przyciskiem submit wywołujemy metodę UpdateQuantity i wysyłamy POST -->
-                        <!--nazwy name w formularzu pasują do nazw parametrów metody, więc framework wstrzykuje wartości automatycznie -->
+                       
 
                                                 <form asp-action="UpdateQuantity" method="post" class="d-flex align-items-center">
                                                     <input type="hidden" name="productId" value="@item.ProductId" />

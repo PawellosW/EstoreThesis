@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using E_Store_Sentiment_Analysis_Thesis.Data;
-using E_Store_Sentiment_Analysis_Thesis.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+﻿using E_Store_Sentiment_Analysis_Thesis.Models;
 using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace E_Store_Sentiment_Analysis_Thesis.Controllers
 {

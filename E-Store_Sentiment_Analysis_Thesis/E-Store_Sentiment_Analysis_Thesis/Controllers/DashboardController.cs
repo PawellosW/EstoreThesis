@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
-using System.IO;
-using System.Diagnostics;
-using Microsoft.Extensions.DependencyInjection;
+﻿using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace E_Store_Sentiment_Analysis_Thesis.Controllers
 {
@@ -46,17 +44,17 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
                 return RedirectToAction("Index");
             }
 
-            // 1. Ścieżka do skryptu
+            
             string pythonScript = Path.Combine(Directory.GetCurrentDirectory(), "AnalysisModule", "master_worker.py");
 
-            // 2. Uruchomienie procesu w tle
+            
             Task.Run(async () =>
             {
                 try
                 {
                     ProcessStartInfo start = new ProcessStartInfo
                     {
-                        FileName = "python", // Upewnij się, że python jest w zmiennych środowiskowych (PATH)
+                        FileName = "python",
                         Arguments = $"\"{pythonScript}\"",
                         WorkingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "AnalysisModule"),
                         UseShellExecute = false,
@@ -67,7 +65,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
 
                     using (Process process = new Process { StartInfo = start })
                     {
-                        process.OutputDataReceived += (sender, e) =>  // ← usuń async
+                        process.OutputDataReceived += (sender, e) => 
                         {
                             if (!string.IsNullOrEmpty(e.Data) && e.Data.StartsWith("###ID:"))
                             {
@@ -80,13 +78,13 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
                                     using (var scope = _serviceScopeFactory.CreateScope())
                                     {
                                         var service = scope.ServiceProvider.GetRequiredService<IDashboardAnalysisService>();
-                                        // .GetAwaiter().GetResult() zamiast await — bezpieczne w event handlerze
+                                        
                                         service.SaveSingleAnalysisResultToDb(id, output).GetAwaiter().GetResult();
                                     }
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.WriteLine("[PARSE ERR] " + ex.Message); // ← teraz błędy będą widoczne
+                                    Console.WriteLine("[PARSE ERR] " + ex.Message);
                                 }
                             }
                         };
@@ -98,14 +96,14 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
                         };
 
                         process.Start();
-                        process.BeginOutputReadLine(); // Rozpocznij nasłuchiwanie
+                        process.BeginOutputReadLine(); 
                         process.BeginErrorReadLine();
                         process.WaitForExit();
                     }
                 }
                 catch (Exception ex)
                 {
-                    // Logowanie błędów, jeśli skrypt się nawet nie odpalił
+                   
                     Console.WriteLine("Błąd startu skryptu: " + ex.Message);
                 }
             });

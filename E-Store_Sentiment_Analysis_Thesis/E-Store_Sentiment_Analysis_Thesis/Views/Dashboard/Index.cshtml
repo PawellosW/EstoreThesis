@@ -11,7 +11,7 @@
         new { Label = "Obsługa klienta",     Value = Model.AverageService,  Color = "bg-warning" }
     };
 
-    // Wskaźnik satysfakcji = średnia ze średnich aspektów (pomijamy aspekty bez danych)
+    
     var rated = aspects.Where(a => a.Value > 0).Select(a => a.Value).ToList();
     var satisfaction = rated.Any() ? Math.Round(rated.Average(), 2) : 0m;
 
@@ -20,7 +20,7 @@
 
 <div class="container-fluid py-4" style="background-color: #f8f9fa; min-height: 100vh;">
 
-    <!-- NAGŁÓWEK -->
+
     <div class="card border-0 shadow-sm p-4 mb-4"
          style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
         <div class="d-flex justify-content-between align-items-center text-white">
@@ -63,7 +63,7 @@
         </div>
     }
 
-    <!-- KAFELKI -->
+    
     <div class="row">
 
         <div class="col-md-4 mb-4">
@@ -104,7 +104,7 @@
 
     </div>
 
-    <!-- TABELA ALERTÓW -->
+   
     @if (Model.UrgentReviews != null && Model.UrgentReviews.Any())
     {
         <div class="card border-0 shadow-sm p-4 mb-4">
@@ -133,7 +133,7 @@
         </div>
     }
 
-    <!-- ŚREDNIE ASPEKTÓW -->
+  
     <div class="card border-0 shadow-sm p-4">
         <h5 class="font-weight-bold text-dark mb-4">Średnie oceny aspektów</h5>
         @foreach (var aspect in aspects)

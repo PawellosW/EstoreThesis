@@ -2,7 +2,6 @@
 using E_Store_Sentiment_Analysis_Thesis.Models;
 using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;

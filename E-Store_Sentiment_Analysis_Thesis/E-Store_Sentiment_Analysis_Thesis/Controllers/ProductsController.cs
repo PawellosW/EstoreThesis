@@ -1,21 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using E_Store_Sentiment_Analysis_Thesis.Data;
-using E_Store_Sentiment_Analysis_Thesis.Models;
-using System.Threading.Tasks;
-using System.Linq;
-using Microsoft.AspNetCore.Authorization;
-using System;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using E_Store_Sentiment_Analysis_Thesis.Models;
 using E_Store_Sentiment_Analysis_Thesis.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace E_Store_Sentiment_Analysis_Thesis.Controllers
 {
-
-
-
-
 
 
     public class ProductsController : Controller
@@ -29,8 +23,6 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
             _parser = parserService;
         }
 
-        // LISTA PRODUKTÓW
-
 
         public async Task<IActionResult> Index(int? categoryId)
         {
@@ -41,7 +33,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
             return View(products);
         }
 
-        // CREATE (GET)
+      
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
@@ -49,7 +41,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
             return View();
         }
 
-        // CREATE (POST)
+     
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
@@ -64,7 +56,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
             return View(product);
         }
 
-        // EDIT (GET)
+     
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -77,7 +69,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
             return View(product);
         }
 
-        // EDIT (POST)
+        
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
@@ -99,7 +91,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
             return View(product);
         }
 
-        // DELETE (GET)
+        
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -108,7 +100,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
             return product == null ? NotFound() : View(product);
         }
 
-        // DELETE (POST)
+        
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
@@ -118,7 +110,7 @@ namespace E_Store_Sentiment_Analysis_Thesis.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POMOCNIK UI (Zostaje w kontrolerze, bo dotyczy widoku)
+       
         private async Task PrepareCategoriesViewBag()
         {
             var categories = await _service.GetAllCategoriesAsync();
