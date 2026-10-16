@@ -17,14 +17,14 @@
 
                 @if (Model.Stock > 0)
                 {
-                    <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline ms-2">
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline ml-2">
                         <input type="hidden" name="productId" value="@Model.Id" />
                         <button type="submit" class="btn btn-primary">Dodaj do koszyka</button>
                     </form>
                 }
                 else
                 {
-                    <span class="badge bg-warning text-dark ms-2 p-2">Produkt niedostępny</span>
+                    <span class="badge badge-warning text-dark ml-2 p-2">Produkt niedostępny</span>
                 }
             </div>
 
