@@ -1,6 +1,7 @@
 # Sklep internetowy z inteligentnym przetwarzaniem opinii
 
 Platforma e-commerce z wbudowanym modułem inteligentnej analizy opinii klientów. 
+
 System umożliwia klientowi przeglądanie i zamawianie produktów, dodawanie ich do koszyka, oraz wystawianie opinii pod produktami, lub w panelu opinii o sklepie.
 
 Administrator posiada dedykowany panel transakcji, funkcjonalności zarządzania stanem magazynowym oraz dashboard analityczny, w którym może uruchomić analizę opinii klientów przy użyciu lokalnego modelu językowego.
@@ -19,8 +20,7 @@ Konto administratora :
 Konto klienta:
 `EmanuelR.85@demo.pl` / `EmanuelDemo!`
 
-Środowisko demonstracyjne z danymi testowymi. Pierwsze wejście może potrwać
-kilkanaście sekund - baza wznawia się po okresie bezczynności.
+Środowisko demonstracyjne z danymi testowymi. Aplikacja hostowana jest na subskrypcji studenckiej.
 
 Szczegóły wdrożenia: [docs/deployment/Azure_Deployment.md](docs/deployment/Azure_Deployment.md)
 
@@ -36,7 +36,7 @@ Szczegóły wdrożenia: [docs/deployment/Azure_Deployment.md](docs/deployment/Az
 | pyodbc | Połączenie workera z bazą danych |
 | Bielik 4.5B Q8 | Lokalny model językowy do analizy opinii |
 | Docker | Konteneryzacja aplikacji |
-
+| Azure  | Wdrożenie aplikacji |
 ---
 
 # Architektura i diagramy systemu
